@@ -1,0 +1,10 @@
+#userCode {
+    position: relative;
+    float: left;
+    width: 500px;
+    height: 500px;
+}
+
+#board {
+    float: left;
+}

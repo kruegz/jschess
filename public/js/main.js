@@ -1,5 +1,5 @@
 var board,
-  game = new Chess();
+    game = new Chess();
 
 // do not pick up pieces if the game is over
 // only pick up pieces for White
@@ -10,14 +10,11 @@ var onDragStart = function(source, piece, position, orientation) {
   }
 };
 
-var makeRandomMove = function() {
-  var possibleMoves = game.moves();
+var generateMove = new Function;
 
-  // game over
-  if (possibleMoves.length === 0) return;
-
-  var randomIndex = Math.floor(Math.random() * possibleMoves.length);
-  game.move(possibleMoves[randomIndex]);
+var makeMove = function() {
+  var move = generateMove(game);
+  game.move(move);
   board.position(game.fen());
 };
 
@@ -33,7 +30,7 @@ var onDrop = function(source, target) {
   if (move === null) return 'snapback';
 
   // make random legal move for black
-  window.setTimeout(makeRandomMove, 250);
+  window.setTimeout(makeMove, 250);
 };
 
 // update the board position after the piece snap
@@ -49,4 +46,27 @@ var cfg = {
   onDrop: onDrop,
   onSnapEnd: onSnapEnd
 };
+
+
 board = ChessBoard('board', cfg);
+
+
+$("#reset").click(function() {
+    // Get user-written code
+    var userCodeString = $("#userCode").val();
+    
+    // Wrap user code with function creating syntax
+    var userCodeStringWrapped = "function createUserCode() {" + userCodeString + "} var userCode = new createUserCode(); return userCode;";
+    
+    // Interpret the user code
+    var userCodeFunc = new Function(userCodeStringWrapped);
+    
+    // Create and instance of user code
+    var userCode = userCodeFunc();
+
+    // Assign generateMove func to be the user written function
+    generateMove = userCode.generateMove;
+    
+    // Reset the board
+    board.start(true);
+});
