@@ -49,11 +49,13 @@ var cfg = {
 
 
 board = ChessBoard('board', cfg);
-
+var editor = ace.edit("aceEditor");
+editor.getSession().setMode("ace/mode/javascript");
 
 $("#reset").click(function() {
     // Get user-written code
-    var userCodeString = $("#userCode").val();
+    //var userCodeString = $("#userCode").val();
+    var userCodeString = editor.getValue();
     
     // Wrap user code with function creating syntax
     var userCodeStringWrapped = "function createUserCode() {" + userCodeString + "} var userCode = new createUserCode(); return userCode;";
